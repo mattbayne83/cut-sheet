@@ -10,7 +10,6 @@ interface ShoppingSummaryProps {
 export function ShoppingSummary({ result }: ShoppingSummaryProps) {
   const sheetWidth = useAppStore((s) => s.sheetWidth)
   const sheetHeight = useAppStore((s) => s.sheetHeight)
-  const unitSystem = useAppStore((s) => s.unitSystem)
   const sheetPrice = useAppStore((s) => s.sheetPricePerUnit)
   const setSheetPrice = useAppStore((s) => s.setSheetPrice)
 
@@ -30,7 +29,7 @@ export function ShoppingSummary({ result }: ShoppingSummaryProps) {
     setEditingPrice(false)
   }
 
-  const sheetDim = `${formatDimension(sheetWidth, unitSystem)} × ${formatDimension(sheetHeight, unitSystem)}`
+  const sheetDim = `${formatDimension(sheetWidth)} × ${formatDimension(sheetHeight)}`
 
   return (
     <div className="px-3 py-3">

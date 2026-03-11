@@ -16,7 +16,6 @@ const DIM_FONT_SIZE = 2.8
 export function SheetView({ sheet }: SheetViewProps) {
   const sheetWidth = useAppStore((s) => s.sheetWidth)
   const sheetHeight = useAppStore((s) => s.sheetHeight)
-  const unitSystem = useAppStore((s) => s.unitSystem)
   const pieces = useAppStore((s) => s.pieces)
   const [hoveredPieceIdx, setHoveredPieceIdx] = useState<number | null>(null)
 
@@ -79,7 +78,7 @@ export function SheetView({ sheet }: SheetViewProps) {
             const pieceIndex = pieces.findIndex(item => item.id === p.pieceId)
             const alphaLabel = pieceIndex >= 0 ? getPieceLabel(pieceIndex) : p.label || 'Piece'
             
-            const dimText = `${formatDimension(p.rotated ? p.height : p.width, unitSystem)} × ${formatDimension(p.rotated ? p.width : p.height, unitSystem)}`
+            const dimText = `${formatDimension(p.rotated ? p.height : p.width)} × ${formatDimension(p.rotated ? p.width : p.height)}`
             const centerX = p.x + p.width / 2
             const centerY = p.y + p.height / 2
             const hasRoomForLabel = p.width >= 8 && p.height >= 6
@@ -146,7 +145,7 @@ export function SheetView({ sheet }: SheetViewProps) {
                   {getPieceLabel(item.index)}
                 </div>
                 <span className="text-text-secondary">
-                  {formatDimension(item.piece.width, unitSystem)} × {formatDimension(item.piece.height, unitSystem)}
+                  {formatDimension(item.piece.width)} × {formatDimension(item.piece.height)}
                 </span>
                 <span className="text-text-muted">×{item.sheetCount}</span>
               </div>
@@ -154,7 +153,7 @@ export function SheetView({ sheet }: SheetViewProps) {
           </div>
         )}
         <span className="text-text-muted flex-shrink-0">
-          {formatDimension(sheetWidth, unitSystem)} × {formatDimension(sheetHeight, unitSystem)} sheet
+          {formatDimension(sheetWidth)} × {formatDimension(sheetHeight)} sheet
         </span>
       </div>
     </div>

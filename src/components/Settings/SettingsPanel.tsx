@@ -5,9 +5,9 @@ import type { OptimizationMode } from '../../types/plyplan'
 
 const SHEET_PRESETS = [
   { label: '4×8 ft', width: 96, height: 48 },
+  { label: '4×10 ft', width: 120, height: 48 },
   { label: '5×5 ft', width: 60, height: 60 },
   { label: '4×4 ft', width: 48, height: 48 },
-  { label: '2×4 ft', width: 48, height: 24 },
 ]
 
 const KERF_PRESETS = [
@@ -27,15 +27,11 @@ export function SettingsPanel() {
   const sheetWidth = useAppStore((s) => s.sheetWidth)
   const sheetHeight = useAppStore((s) => s.sheetHeight)
   const kerfWidth = useAppStore((s) => s.kerfWidth)
-  const unitSystem = useAppStore((s) => s.unitSystem)
   const optimizationMode = useAppStore((s) => s.optimizationMode)
   const setOptimizationMode = useAppStore((s) => s.setOptimizationMode)
-  const sheetPrice = useAppStore((s) => s.sheetPricePerUnit)
   const setSheetWidth = useAppStore((s) => s.setSheetWidth)
   const setSheetHeight = useAppStore((s) => s.setSheetHeight)
   const setKerfWidth = useAppStore((s) => s.setKerfWidth)
-  const setUnitSystem = useAppStore((s) => s.setUnitSystem)
-  const setSheetPrice = useAppStore((s) => s.setSheetPrice)
 
   if (!settingsOpen) return null
 
@@ -84,7 +80,7 @@ export function SettingsPanel() {
           <div className="flex items-center gap-2 text-[13px] text-text-muted">
             <input
               type="text"
-              value={formatDimension(sheetWidth, unitSystem)}
+              value={formatDimension(sheetWidth)}
               onChange={(e) => {
                 const v = parseDimension(e.target.value.replace(/["']/g, ''))
                 if (v !== null) setSheetWidth(v)
@@ -94,7 +90,7 @@ export function SettingsPanel() {
             <span>×</span>
             <input
               type="text"
-              value={formatDimension(sheetHeight, unitSystem)}
+              value={formatDimension(sheetHeight)}
               onChange={(e) => {
                 const v = parseDimension(e.target.value.replace(/["']/g, ''))
                 if (v !== null) setSheetHeight(v)
@@ -134,37 +130,6 @@ export function SettingsPanel() {
                 {mode.label}
               </button>
             ))}
-          </div>
-        </div>
-
-        {/* Units */}
-        <div>
-          <label className="block text-[13px] font-medium text-text-secondary mb-2">Units</label>
-          <div className="flex gap-2">
-            {(['inches', 'mm'] as const).map((u) => (
-              <button
-                key={u}
-                onClick={() => setUnitSystem(u)}
-                className={chipClass(unitSystem === u)}
-              >
-                {u === 'inches' ? 'Inches' : 'Millimeters'}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Price per sheet */}
-        <div>
-          <label className="block text-[13px] font-medium text-text-secondary mb-2">Price per sheet</label>
-          <div className="flex items-center gap-1">
-            <span className="text-text-secondary text-[15px]">$</span>
-            <input
-              type="number"
-              min={0}
-              value={sheetPrice}
-              onChange={(e) => setSheetPrice(Math.max(0, parseFloat(e.target.value) || 0))}
-              className="w-20 border border-border rounded-[var(--radius-input)] px-3 py-2.5 text-center text-text bg-surface-raised text-[15px] outline-none focus:ring-1 focus:ring-primary/30"
-            />
           </div>
         </div>
 

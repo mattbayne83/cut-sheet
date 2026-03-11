@@ -1,6 +1,5 @@
 export type PieceId = string
 export type SheetId = string
-export type UnitSystem = 'inches' | 'mm'
 export type OptimizationMode = 'minimize-waste' | 'minimize-saw-changes'
 
 export interface Piece {

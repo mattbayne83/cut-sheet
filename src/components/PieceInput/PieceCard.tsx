@@ -16,14 +16,13 @@ interface PieceCardProps {
 export function PieceCard({ piece, index, errors = [], onEnterOnLastRow }: PieceCardProps) {
   const updatePiece = useAppStore((s) => s.updatePiece)
   const removePiece = useAppStore((s) => s.removePiece)
-  const unitSystem = useAppStore((s) => s.unitSystem)
   const pieces = useAppStore((s) => s.pieces)
 
   const [widthInput, setWidthInput] = useState(
-    piece.width > 0 ? formatDimension(piece.width, unitSystem) : ''
+    piece.width > 0 ? formatDimension(piece.width) : ''
   )
   const [heightInput, setHeightInput] = useState(
-    piece.height > 0 ? formatDimension(piece.height, unitSystem) : ''
+    piece.height > 0 ? formatDimension(piece.height) : ''
   )
 
   const commitDimension = (field: 'width' | 'height', value: string) => {

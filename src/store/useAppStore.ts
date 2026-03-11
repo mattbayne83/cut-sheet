@@ -3,7 +3,6 @@ import { persist } from 'zustand/middleware'
 import type {
   Piece,
   PieceId,
-  UnitSystem,
   OptimizationMode,
   PackerResult,
   ExtractionResult,
@@ -22,7 +21,6 @@ interface AppState {
   sheetWidth: number
   sheetHeight: number
   kerfWidth: number
-  unitSystem: UnitSystem
   optimizationMode: OptimizationMode
   geminiApiKey: string
   sheetPricePerUnit: number
@@ -58,7 +56,6 @@ interface AppState {
   setSheetWidth: (w: number) => void
   setSheetHeight: (h: number) => void
   setKerfWidth: (k: number) => void
-  setUnitSystem: (u: UnitSystem) => void
   setOptimizationMode: (m: OptimizationMode) => void
   setGeminiApiKey: (key: string) => void
   setSheetPrice: (price: number) => void
@@ -89,7 +86,6 @@ export const useAppStore = create<AppState>()(
       sheetWidth: 96,
       sheetHeight: 48,
       kerfWidth: 0.125,
-      unitSystem: 'inches' as UnitSystem,
       optimizationMode: 'minimize-waste' as OptimizationMode,
       geminiApiKey: '',
       sheetPricePerUnit: 55,
@@ -166,7 +162,6 @@ export const useAppStore = create<AppState>()(
       setSheetWidth: (w) => set({ sheetWidth: w, result: null }),
       setSheetHeight: (h) => set({ sheetHeight: h, result: null }),
       setKerfWidth: (k) => set({ kerfWidth: k, result: null }),
-      setUnitSystem: (u) => set({ unitSystem: u }),
       setOptimizationMode: (m) => set({ optimizationMode: m, result: null }),
       setGeminiApiKey: (key) => set({ geminiApiKey: key }),
       setSheetPrice: (price) => set({ sheetPricePerUnit: price }),
@@ -192,7 +187,6 @@ export const useAppStore = create<AppState>()(
         sheetWidth: state.sheetWidth,
         sheetHeight: state.sheetHeight,
         kerfWidth: state.kerfWidth,
-        unitSystem: state.unitSystem,
         optimizationMode: state.optimizationMode,
         geminiApiKey: state.geminiApiKey,
         sheetPricePerUnit: state.sheetPricePerUnit,

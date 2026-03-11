@@ -1,5 +1,3 @@
-import type { UnitSystem } from '../types/plyplan'
-
 const FRACTIONS: Record<number, string> = {
   0.0625: '1/16',
   0.125: '1/8',
@@ -49,10 +47,8 @@ export function parseDimension(input: string): number | null {
   return null
 }
 
-/** Format a decimal dimension for display with fractions */
-export function formatDimension(value: number, unit: UnitSystem): string {
-  if (unit === 'mm') return `${Math.round(value)}mm`
-
+/** Format a decimal dimension for display with fractions (inches) */
+export function formatDimension(value: number): string {
   const whole = Math.floor(value)
   const decimal = Math.round((value - whole) * 10000) / 10000
 
@@ -75,10 +71,3 @@ export function formatDimension(value: number, unit: UnitSystem): string {
   return `${value}"`
 }
 
-export function inchesToMm(inches: number): number {
-  return inches * 25.4
-}
-
-export function mmToInches(mm: number): number {
-  return mm / 25.4
-}
