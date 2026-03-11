@@ -1,7 +1,6 @@
 import { useAppStore } from '../../store/useAppStore'
 import { parseDimension, formatDimension } from '../../utils/units'
-import { useState } from 'react'
-import { ChevronDown, X } from 'lucide-react'
+import { X } from 'lucide-react'
 import type { OptimizationMode } from '../../types/cutSheet'
 
 const SHEET_PRESETS = [
@@ -30,16 +29,12 @@ export function SettingsPanel() {
   const unitSystem = useAppStore((s) => s.unitSystem)
   const optimizationMode = useAppStore((s) => s.optimizationMode)
   const setOptimizationMode = useAppStore((s) => s.setOptimizationMode)
-  const geminiApiKey = useAppStore((s) => s.geminiApiKey)
   const sheetPrice = useAppStore((s) => s.sheetPricePerUnit)
   const setSheetWidth = useAppStore((s) => s.setSheetWidth)
   const setSheetHeight = useAppStore((s) => s.setSheetHeight)
   const setKerfWidth = useAppStore((s) => s.setKerfWidth)
   const setUnitSystem = useAppStore((s) => s.setUnitSystem)
-  const setGeminiApiKey = useAppStore((s) => s.setGeminiApiKey)
   const setSheetPrice = useAppStore((s) => s.setSheetPrice)
-
-  const [showApiKey, setShowApiKey] = useState(false)
 
   if (!settingsOpen) return null
 
@@ -172,43 +167,6 @@ export function SettingsPanel() {
           </div>
         </div>
 
-        {/* Gemini API Key */}
-        <details className="group">
-          <summary className="flex items-center gap-1 text-[13px] font-medium text-text-secondary cursor-pointer list-none">
-            <ChevronDown size={14} className="transition-transform group-open:rotate-180" />
-            Gemini API Key
-            <span className="text-text-muted font-normal ml-1">(for photo extraction)</span>
-          </summary>
-          <div className="mt-2 space-y-2">
-            <p className="text-[11px] text-text-muted">
-              Free at{' '}
-              <a
-                href="https://aistudio.google.com/apikey"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-primary hover:underline"
-              >
-                aistudio.google.com
-              </a>
-              {' '}— no credit card required.
-            </p>
-            <div className="flex gap-2">
-              <input
-                type={showApiKey ? 'text' : 'password'}
-                value={geminiApiKey}
-                onChange={(e) => setGeminiApiKey(e.target.value)}
-                placeholder="AIza..."
-                className="flex-1 border border-border rounded-[var(--radius-input)] px-3 py-2.5 text-[15px] text-text bg-surface-raised outline-none focus:ring-1 focus:ring-primary/30"
-              />
-              <button
-                onClick={() => setShowApiKey(!showApiKey)}
-                className={chipClass(false)}
-              >
-                {showApiKey ? 'Hide' : 'Show'}
-              </button>
-            </div>
-          </div>
-        </details>
       </div>
     </div>
   )
