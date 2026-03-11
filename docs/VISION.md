@@ -1,4 +1,4 @@
-# CutSheet — Vision & North Star
+# Plyplan — Vision & North Star
 
 ## One-Liner
 
@@ -14,7 +14,7 @@ The existing tools are built for the wrong moment. They assume you're at a desk,
 
 ## The Vision
 
-CutSheet answers the question: **snap a photo of your sketch, see how many sheets you need, go buy them.**
+Plyplan answers the question: **snap a photo of your sketch, see how many sheets you need, go buy them.**
 
 Then — once you're back in the shop — print a clean cut diagram with dimensions and layout. Cut order is up to you. You know your tools.
 
@@ -44,7 +44,7 @@ No install. No subscription wall. No re-typing dimensions. No computer required.
 
 ## Competitive Position
 
-| Dimension | Market Status Quo | CutSheet |
+| Dimension | Market Status Quo | Plyplan |
 |-----------|-------------------|----------|
 | **Input** | Manual dimension entry | AI sketch extraction (Gemini Vision) |
 | **UX** | 2000s-era desktop interfaces | Modern, responsive, mobile-first |

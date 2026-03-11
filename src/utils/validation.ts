@@ -1,4 +1,4 @@
-import type { Piece, PieceId } from '../types/cutSheet'
+import type { Piece, PieceId } from '../types/plyplan'
 
 export interface ValidationError {
   pieceId: PieceId

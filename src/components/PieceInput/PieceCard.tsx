@@ -1,6 +1,6 @@
 import { X, Plus, Minus } from 'lucide-react'
 import { useState } from 'react'
-import type { Piece } from '../../types/cutSheet'
+import type { Piece } from '../../types/plyplan'
 import type { ValidationError } from '../../utils/validation'
 import { useAppStore } from '../../store/useAppStore'
 import { parseDimension, formatDimension } from '../../utils/units'

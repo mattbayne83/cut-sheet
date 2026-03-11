@@ -8,7 +8,7 @@ import type {
   PackerResult,
   ExtractionResult,
   ExtractedPiece,
-} from '../types/cutSheet'
+} from '../types/plyplan'
 import { generateId } from '../utils/id'
 import { guillotinePack } from '../utils/packer'
 import { PIECE_COLORS } from '../styles/tokens'
@@ -69,6 +69,15 @@ interface AppState {
   runOptimizer: () => void
   setActiveSheetIndex: (i: number) => void
   clearResults: () => void
+}
+
+// Migrate localStorage from old key to new key (one-time)
+if (typeof window !== 'undefined') {
+  const oldData = localStorage.getItem('cut-sheet-storage')
+  if (oldData && !localStorage.getItem('plyplan-storage')) {
+    localStorage.setItem('plyplan-storage', oldData)
+    localStorage.removeItem('cut-sheet-storage')
+  }
 }
 
 export const useAppStore = create<AppState>()(
@@ -176,7 +185,7 @@ export const useAppStore = create<AppState>()(
       clearResults: () => set({ result: null }),
     }),
     {
-      name: 'cut-sheet-storage',
+      name: 'plyplan-storage',
       partialize: (state) => ({
         pieces: state.pieces,
         colorIndex: state.colorIndex,

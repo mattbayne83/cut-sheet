@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useAppStore } from '../../store/useAppStore'
 import { formatDimension } from '../../utils/units'
-import type { PackerResult } from '../../types/cutSheet'
+import type { PackerResult } from '../../types/plyplan'
 
 interface ShoppingSummaryProps {
   result: PackerResult

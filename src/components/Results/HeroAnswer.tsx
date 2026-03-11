@@ -1,4 +1,4 @@
-import type { PackerResult } from '../../types/cutSheet'
+import type { PackerResult } from '../../types/plyplan'
 
 interface HeroAnswerProps {
   result: PackerResult

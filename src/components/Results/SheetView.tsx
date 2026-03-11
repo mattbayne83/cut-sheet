@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import type { SheetResult } from '../../types/cutSheet'
+import type { SheetResult } from '../../types/plyplan'
 import { useAppStore } from '../../store/useAppStore'
 import { formatDimension } from '../../utils/units'
 import { colors } from '../../styles/tokens'

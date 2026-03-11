@@ -1,7 +1,7 @@
 import { Check, X, RefreshCw, Loader2, AlertCircle } from 'lucide-react'
 import { useState } from 'react'
 import { useAppStore } from '../../store/useAppStore'
-import type { ExtractedPiece } from '../../types/cutSheet'
+import type { ExtractedPiece } from '../../types/plyplan'
 
 export function PhotoPreview() {
   const uploadedPhotoUrl = useAppStore((s) => s.uploadedPhotoUrl)

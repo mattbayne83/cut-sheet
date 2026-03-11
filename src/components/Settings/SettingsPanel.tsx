@@ -1,7 +1,7 @@
 import { useAppStore } from '../../store/useAppStore'
 import { parseDimension, formatDimension } from '../../utils/units'
 import { X } from 'lucide-react'
-import type { OptimizationMode } from '../../types/cutSheet'
+import type { OptimizationMode } from '../../types/plyplan'
 
 const SHEET_PRESETS = [
   { label: '4×8 ft', width: 96, height: 48 },

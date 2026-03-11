@@ -1,4 +1,4 @@
-# CutSheet
+# Plyplan
 
 **Know how many sheets to buy before you get in the truck.**
 
@@ -35,7 +35,7 @@ Plywood cut sheet optimizer for woodworkers. Snap a photo of a hand-drawn sketch
 ## Key Files
 
 ### Core
-- `src/types/cutSheet.ts` — All type definitions (Piece, Placement, SheetResult, etc.)
+- `src/types/plyplan.ts` — All type definitions (Piece, Placement, SheetResult, etc.)
 - `src/store/useAppStore.ts` — Main Zustand store (persisted)
 - `src/styles/tokens.ts` — JS-accessible design tokens + `PIECE_COLORS` array
 - `src/hooks/useAutoOptimize.ts` — Debounced auto-optimize hook (consumed in App.tsx)

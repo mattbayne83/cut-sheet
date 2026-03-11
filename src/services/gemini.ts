@@ -1,5 +1,5 @@
 import { GoogleGenAI } from '@google/genai'
-import type { ExtractionResult } from '../types/cutSheet'
+import type { ExtractionResult } from '../types/plyplan'
 
 export async function extractDimensionsFromPhoto(
   base64Data: string,

@@ -20,7 +20,7 @@ export function ExportButton({ targetRef, sheetIndex }: ExportButtonProps) {
         fontEmbedCSS: '',
       })
       const link = document.createElement('a')
-      link.download = `cut-sheet-${sheetIndex + 1}.png`
+      link.download = `plyplan-${sheetIndex + 1}.png`
       link.href = dataUrl
       link.click()
     } catch (err) {

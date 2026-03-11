@@ -1,4 +1,4 @@
-import type { UnitSystem } from '../types/cutSheet'
+import type { UnitSystem } from '../types/plyplan'
 
 const FRACTIONS: Record<number, string> = {
   0.0625: '1/16',

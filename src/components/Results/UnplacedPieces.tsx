@@ -1,5 +1,5 @@
 import { AlertTriangle } from 'lucide-react'
-import type { PackerResult, Piece } from '../../types/cutSheet'
+import type { PackerResult, Piece } from '../../types/plyplan'
 import { useAppStore } from '../../store/useAppStore'
 
 interface UnplacedPiecesProps {

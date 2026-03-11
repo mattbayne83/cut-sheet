@@ -1,4 +1,4 @@
-import type { Piece, PackerConfig, PackerResult, Placement, SheetResult } from '../types/cutSheet'
+import type { Piece, PackerConfig, PackerResult, Placement, SheetResult } from '../types/plyplan'
 import { generateId } from './id'
 
 interface FreeRect {
