@@ -2,4 +2,50 @@
 
 @theme {
   --font-sans: 'Inter', sans-serif;
+
+  /* Warm workshop palette */
+  --color-bg: #FAF8F5;
+  --color-surface: #FFFFFF;
+  --color-surface-raised: #F5F0EB;
+  --color-border: #E8DDD4;
+  --color-border-strong: #D4C4B5;
+  --color-text: #2C1810;
+  --color-text-secondary: #8B6F5E;
+  --color-text-muted: #A89888;
+
+  /* Primary — burnt orange (DeWalt aesthetic) */
+  --color-primary: #C2410C;
+  --color-primary-hover: #9A3412;
+  --color-primary-light: #FFF7ED;
+
+  /* Semantic */
+  --color-success: #15803D;
+  --color-success-light: #F0FDF4;
+  --color-warning: #D97706;
+  --color-warning-light: #FFFBEB;
+  --color-error: #DC2626;
+  --color-error-light: #FEF2F2;
+
+  /* Radii */
+  --radius-card: 16px;
+  --radius-button: 12px;
+  --radius-input: 8px;
+}
+
+html {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Print styles */
+@media print {
+  html {
+    background-color: white;
+  }
+
+  .no-print {
+    display: none !important;
+  }
 }

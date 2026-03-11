@@ -11,12 +11,7 @@ import type {
 } from '../types/cutSheet'
 import { generateId } from '../utils/id'
 import { guillotinePack } from '../utils/packer'
-
-const PIECE_COLORS = [
-  '#3B82F6', '#EF4444', '#10B981', '#F59E0B',
-  '#8B5CF6', '#EC4899', '#06B6D4', '#F97316',
-  '#6366F1', '#14B8A6', '#E11D48', '#84CC16',
-]
+import { PIECE_COLORS } from '../styles/tokens'
 
 interface AppState {
   // Pieces
@@ -30,6 +25,7 @@ interface AppState {
   unitSystem: UnitSystem
   optimizationMode: OptimizationMode
   geminiApiKey: string
+  sheetPricePerUnit: number
 
   // Photo extraction (transient)
   uploadedPhotoUrl: string | null
@@ -43,6 +39,7 @@ interface AppState {
   // UI
   activeSheetIndex: number
   settingsOpen: boolean
+  sawViewOpen: boolean
 
   // Piece actions
   addPiece: () => void
@@ -64,7 +61,9 @@ interface AppState {
   setUnitSystem: (u: UnitSystem) => void
   setOptimizationMode: (m: OptimizationMode) => void
   setGeminiApiKey: (key: string) => void
+  setSheetPrice: (price: number) => void
   setSettingsOpen: (open: boolean) => void
+  setSawViewOpen: (open: boolean) => void
 
   // Results actions
   runOptimizer: () => void
@@ -84,6 +83,7 @@ export const useAppStore = create<AppState>()(
       unitSystem: 'inches' as UnitSystem,
       optimizationMode: 'minimize-waste' as OptimizationMode,
       geminiApiKey: '',
+      sheetPricePerUnit: 55,
       uploadedPhotoUrl: null,
       extractionStatus: 'idle' as const,
       extractionResult: null,
@@ -91,6 +91,7 @@ export const useAppStore = create<AppState>()(
       result: null,
       activeSheetIndex: 0,
       settingsOpen: false,
+      sawViewOpen: false,
 
       addPiece: () =>
         set((s) => {
@@ -159,7 +160,9 @@ export const useAppStore = create<AppState>()(
       setUnitSystem: (u) => set({ unitSystem: u }),
       setOptimizationMode: (m) => set({ optimizationMode: m, result: null }),
       setGeminiApiKey: (key) => set({ geminiApiKey: key }),
+      setSheetPrice: (price) => set({ sheetPricePerUnit: price }),
       setSettingsOpen: (open) => set({ settingsOpen: open }),
+      setSawViewOpen: (open) => set({ sawViewOpen: open }),
 
       runOptimizer: () => {
         const { pieces, sheetWidth, sheetHeight, kerfWidth, optimizationMode } = get()
@@ -183,6 +186,7 @@ export const useAppStore = create<AppState>()(
         unitSystem: state.unitSystem,
         optimizationMode: state.optimizationMode,
         geminiApiKey: state.geminiApiKey,
+        sheetPricePerUnit: state.sheetPricePerUnit,
       }),
     }
   )

@@ -1,4 +1,4 @@
-import { Upload, Camera, Loader2 } from 'lucide-react'
+import { Camera, Loader2 } from 'lucide-react'
 import { useCallback, useRef } from 'react'
 import { useAppStore } from '../../store/useAppStore'
 import { extractDimensionsFromPhoto } from '../../services/gemini'
@@ -18,13 +18,11 @@ export function PhotoUpload() {
 
   const handleFile = useCallback(
     async (file: File) => {
-      // Validate type
       if (!file.type.startsWith('image/')) {
         setExtractionError('Please upload an image file (JPEG, PNG, or WebP).')
         return
       }
 
-      // Create object URL for preview
       const objectUrl = URL.createObjectURL(file)
       setUploadedPhoto(objectUrl)
       setExtractionResult(null)
@@ -35,7 +33,6 @@ export function PhotoUpload() {
         return
       }
 
-      // Read as base64 and extract
       setExtractionStatus('extracting')
       try {
         const base64 = await fileToBase64(file)
@@ -69,50 +66,48 @@ export function PhotoUpload() {
   }
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-      <div className="px-4 py-3 border-b border-gray-100">
-        <h2 className="text-sm font-semibold text-gray-700 uppercase tracking-wide flex items-center gap-2">
-          <Camera size={14} />
-          Sketch Photo
-          <span className="text-xs font-normal text-gray-400 normal-case">(optional)</span>
-        </h2>
-      </div>
-
+    <div className="bg-surface rounded-[var(--radius-card)] border border-border overflow-hidden">
       <div
         onDrop={handleDrop}
         onDragOver={handleDragOver}
         onClick={() => fileInputRef.current?.click()}
-        className="px-6 py-10 flex flex-col items-center gap-3 cursor-pointer hover:bg-gray-50/50 transition-colors"
+        className="px-4 py-8 flex flex-col items-center gap-3 cursor-pointer hover:bg-surface-raised/50 transition-colors"
       >
         {extractionStatus === 'extracting' ? (
           <>
-            <Loader2 size={32} className="text-blue-500 animate-spin" />
-            <p className="text-sm text-gray-500">Extracting dimensions...</p>
+            <Loader2 size={32} className="text-primary animate-spin" />
+            <p className="text-[15px] text-text-secondary">Reading your sketch...</p>
           </>
         ) : (
           <>
-            <Upload size={32} className="text-gray-300" />
-            <p className="text-sm text-gray-500">
-              Drop a photo of your sketch here, or click to browse
-            </p>
-            <p className="text-xs text-gray-400">JPEG, PNG, or WebP</p>
+            <div className="w-14 h-14 rounded-full bg-primary-light flex items-center justify-center">
+              <Camera size={24} className="text-primary" />
+            </div>
+            <div className="text-center">
+              <p className="text-[15px] text-text-secondary font-medium">
+                Snap a photo of your sketch
+              </p>
+              <p className="text-[13px] text-text-muted mt-0.5">
+                or drop an image here
+              </p>
+            </div>
           </>
         )}
       </div>
 
       {!geminiApiKey && (
-        <div className="px-4 py-2 bg-amber-50 border-t border-amber-100 text-xs text-amber-700">
+        <div className="px-4 py-2.5 bg-warning-light border-t border-warning/20 text-[13px] text-warning">
           Add a{' '}
           <button
             onClick={(e) => {
               e.stopPropagation()
               setSettingsOpen(true)
             }}
-            className="underline hover:text-amber-900"
+            className="underline hover:text-primary-hover font-medium"
           >
             Gemini API key
           </button>{' '}
-          in settings to enable automatic dimension extraction.
+          in settings to enable photo extraction.
         </div>
       )}
 
@@ -120,6 +115,7 @@ export function PhotoUpload() {
         ref={fileInputRef}
         type="file"
         accept="image/*"
+        capture="environment"
         onChange={(e) => {
           const file = e.target.files?.[0]
           if (file) handleFile(file)
@@ -135,7 +131,6 @@ function fileToBase64(file: File): Promise<string> {
     const reader = new FileReader()
     reader.onload = () => {
       const result = reader.result as string
-      // Strip the data URL prefix to get raw base64
       const base64 = result.split(',')[1]
       resolve(base64)
     }

@@ -33,10 +33,10 @@ export function ExportButton({ targetRef, sheetIndex }: ExportButtonProps) {
     <button
       onClick={handleExport}
       disabled={exporting}
-      className="px-4 py-2 text-sm font-medium border border-gray-200 rounded-lg hover:bg-gray-50 text-gray-700 transition-colors flex items-center gap-2 disabled:opacity-50"
+      className="p-2.5 rounded-[var(--radius-input)] text-text-muted hover:bg-surface-raised hover:text-text-secondary transition-colors disabled:opacity-50"
+      title="Export PNG"
     >
       <Download size={16} />
-      {exporting ? 'Exporting...' : 'Export PNG'}
     </button>
   )
 }

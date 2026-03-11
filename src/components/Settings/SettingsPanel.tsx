@@ -1,6 +1,8 @@
 import { useAppStore } from '../../store/useAppStore'
 import { parseDimension, formatDimension } from '../../utils/units'
 import { useState } from 'react'
+import { ChevronDown, X } from 'lucide-react'
+import type { OptimizationMode } from '../../types/cutSheet'
 
 const SHEET_PRESETS = [
   { label: '4×8 ft', width: 96, height: 48 },
@@ -14,18 +16,28 @@ const KERF_PRESETS = [
   { label: '1/16"', value: 0.0625 },
 ]
 
+const MODES: Array<{ value: OptimizationMode; label: string; desc: string }> = [
+  { value: 'minimize-waste', label: 'Less waste', desc: 'Best material usage' },
+  { value: 'minimize-saw-changes', label: 'Fewer cuts', desc: 'Fewer fence changes' },
+]
+
 export function SettingsPanel() {
   const settingsOpen = useAppStore((s) => s.settingsOpen)
+  const setSettingsOpen = useAppStore((s) => s.setSettingsOpen)
   const sheetWidth = useAppStore((s) => s.sheetWidth)
   const sheetHeight = useAppStore((s) => s.sheetHeight)
   const kerfWidth = useAppStore((s) => s.kerfWidth)
   const unitSystem = useAppStore((s) => s.unitSystem)
+  const optimizationMode = useAppStore((s) => s.optimizationMode)
+  const setOptimizationMode = useAppStore((s) => s.setOptimizationMode)
   const geminiApiKey = useAppStore((s) => s.geminiApiKey)
+  const sheetPrice = useAppStore((s) => s.sheetPricePerUnit)
   const setSheetWidth = useAppStore((s) => s.setSheetWidth)
   const setSheetHeight = useAppStore((s) => s.setSheetHeight)
   const setKerfWidth = useAppStore((s) => s.setKerfWidth)
   const setUnitSystem = useAppStore((s) => s.setUnitSystem)
   const setGeminiApiKey = useAppStore((s) => s.setGeminiApiKey)
+  const setSheetPrice = useAppStore((s) => s.setSheetPrice)
 
   const [showApiKey, setShowApiKey] = useState(false)
 
@@ -35,127 +47,168 @@ export function SettingsPanel() {
     (p) => p.width === sheetWidth && p.height === sheetHeight
   )
 
+  const chipClass = (active: boolean) =>
+    `px-4 py-2.5 text-[13px] font-medium rounded-[var(--radius-button)] border transition-colors ${
+      active
+        ? 'bg-primary-light border-primary/30 text-primary'
+        : 'border-border text-text-secondary hover:border-border-strong hover:text-text'
+    }`
+
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-5 space-y-5">
-      <h2 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">Settings</h2>
+    <div className="bg-surface rounded-[var(--radius-card)] border border-border overflow-hidden">
+      {/* Header with close */}
+      <div className="px-4 py-3 border-b border-border flex items-center justify-between">
+        <h2 className="text-[13px] font-semibold text-text-secondary uppercase tracking-wide">Settings</h2>
+        <button
+          onClick={() => setSettingsOpen(false)}
+          className="p-2 rounded-[var(--radius-input)] text-text-muted hover:bg-surface-raised hover:text-text-secondary transition-colors"
+        >
+          <X size={16} />
+        </button>
+      </div>
 
-      {/* Sheet Size */}
-      <div>
-        <label className="block text-sm font-medium text-gray-600 mb-2">Sheet Size</label>
-        <div className="flex gap-2 mb-2">
-          {SHEET_PRESETS.map((preset) => (
-            <button
-              key={preset.label}
-              onClick={() => {
-                setSheetWidth(preset.width)
-                setSheetHeight(preset.height)
+      <div className="p-4 space-y-5">
+        {/* Sheet Size */}
+        <div>
+          <label className="block text-[13px] font-medium text-text-secondary mb-2">Sheet Size</label>
+          <div className="flex flex-wrap gap-2 mb-2">
+            {SHEET_PRESETS.map((preset) => (
+              <button
+                key={preset.label}
+                onClick={() => {
+                  setSheetWidth(preset.width)
+                  setSheetHeight(preset.height)
+                }}
+                className={chipClass(matchedPreset === preset)}
+              >
+                {preset.label}
+              </button>
+            ))}
+          </div>
+          <div className="flex items-center gap-2 text-[13px] text-text-muted">
+            <input
+              type="text"
+              value={formatDimension(sheetWidth, unitSystem)}
+              onChange={(e) => {
+                const v = parseDimension(e.target.value.replace(/["']/g, ''))
+                if (v !== null) setSheetWidth(v)
               }}
-              className={`px-3 py-1.5 text-sm rounded-lg border transition-colors ${
-                matchedPreset === preset
-                  ? 'bg-blue-50 border-blue-300 text-blue-700'
-                  : 'border-gray-200 text-gray-600 hover:border-gray-300'
-              }`}
-            >
-              {preset.label}
-            </button>
-          ))}
+              className="w-20 border border-border rounded-[var(--radius-input)] px-3 py-2.5 text-center text-text bg-surface-raised text-[15px] outline-none focus:ring-1 focus:ring-primary/30"
+            />
+            <span>×</span>
+            <input
+              type="text"
+              value={formatDimension(sheetHeight, unitSystem)}
+              onChange={(e) => {
+                const v = parseDimension(e.target.value.replace(/["']/g, ''))
+                if (v !== null) setSheetHeight(v)
+              }}
+              className="w-20 border border-border rounded-[var(--radius-input)] px-3 py-2.5 text-center text-text bg-surface-raised text-[15px] outline-none focus:ring-1 focus:ring-primary/30"
+            />
+          </div>
         </div>
-        <div className="flex items-center gap-2 text-sm text-gray-500">
-          <input
-            type="text"
-            value={formatDimension(sheetWidth, unitSystem)}
-            onChange={(e) => {
-              const v = parseDimension(e.target.value.replace(/["']/g, ''))
-              if (v !== null) setSheetWidth(v)
-            }}
-            className="w-20 border border-gray-200 rounded px-2 py-1 text-center text-gray-900"
-          />
-          <span>×</span>
-          <input
-            type="text"
-            value={formatDimension(sheetHeight, unitSystem)}
-            onChange={(e) => {
-              const v = parseDimension(e.target.value.replace(/["']/g, ''))
-              if (v !== null) setSheetHeight(v)
-            }}
-            className="w-20 border border-gray-200 rounded px-2 py-1 text-center text-gray-900"
-          />
-        </div>
-      </div>
 
-      {/* Kerf Width */}
-      <div>
-        <label className="block text-sm font-medium text-gray-600 mb-2">Kerf Width</label>
-        <div className="flex gap-2">
-          {KERF_PRESETS.map((preset) => (
-            <button
-              key={preset.label}
-              onClick={() => setKerfWidth(preset.value)}
-              className={`px-3 py-1.5 text-sm rounded-lg border transition-colors ${
-                kerfWidth === preset.value
-                  ? 'bg-blue-50 border-blue-300 text-blue-700'
-                  : 'border-gray-200 text-gray-600 hover:border-gray-300'
-              }`}
-            >
-              {preset.label}
-            </button>
-          ))}
+        {/* Kerf Width */}
+        <div>
+          <label className="block text-[13px] font-medium text-text-secondary mb-2">Kerf Width</label>
+          <div className="flex flex-wrap gap-2">
+            {KERF_PRESETS.map((preset) => (
+              <button
+                key={preset.label}
+                onClick={() => setKerfWidth(preset.value)}
+                className={chipClass(kerfWidth === preset.value)}
+              >
+                {preset.label}
+              </button>
+            ))}
+          </div>
         </div>
-      </div>
 
-      {/* Units */}
-      <div>
-        <label className="block text-sm font-medium text-gray-600 mb-2">Units</label>
-        <div className="flex gap-2">
-          {(['inches', 'mm'] as const).map((u) => (
-            <button
-              key={u}
-              onClick={() => setUnitSystem(u)}
-              className={`px-3 py-1.5 text-sm rounded-lg border transition-colors ${
-                unitSystem === u
-                  ? 'bg-blue-50 border-blue-300 text-blue-700'
-                  : 'border-gray-200 text-gray-600 hover:border-gray-300'
-              }`}
-            >
-              {u === 'inches' ? 'Inches' : 'Millimeters'}
-            </button>
-          ))}
+        {/* Optimization Mode */}
+        <div>
+          <label className="block text-[13px] font-medium text-text-secondary mb-2">Priority</label>
+          <div className="flex flex-wrap gap-2">
+            {MODES.map((mode) => (
+              <button
+                key={mode.value}
+                onClick={() => setOptimizationMode(mode.value)}
+                className={chipClass(optimizationMode === mode.value)}
+                title={mode.desc}
+              >
+                {mode.label}
+              </button>
+            ))}
+          </div>
         </div>
-      </div>
 
-      {/* Gemini API Key */}
-      <div>
-        <label className="block text-sm font-medium text-gray-600 mb-1">
-          Gemini API Key
-          <span className="text-gray-400 font-normal"> (optional, for photo extraction)</span>
-        </label>
-        <p className="text-xs text-gray-400 mb-2">
-          Free at{' '}
-          <a
-            href="https://aistudio.google.com/apikey"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-blue-500 hover:underline"
-          >
-            aistudio.google.com
-          </a>
-          {' '}— no credit card required.
-        </p>
-        <div className="flex gap-2">
-          <input
-            type={showApiKey ? 'text' : 'password'}
-            value={geminiApiKey}
-            onChange={(e) => setGeminiApiKey(e.target.value)}
-            placeholder="AIza..."
-            className="flex-1 border border-gray-200 rounded px-2 py-1 text-sm text-gray-900"
-          />
-          <button
-            onClick={() => setShowApiKey(!showApiKey)}
-            className="px-3 py-1 text-xs border border-gray-200 rounded hover:bg-gray-50 text-gray-500"
-          >
-            {showApiKey ? 'Hide' : 'Show'}
-          </button>
+        {/* Units */}
+        <div>
+          <label className="block text-[13px] font-medium text-text-secondary mb-2">Units</label>
+          <div className="flex gap-2">
+            {(['inches', 'mm'] as const).map((u) => (
+              <button
+                key={u}
+                onClick={() => setUnitSystem(u)}
+                className={chipClass(unitSystem === u)}
+              >
+                {u === 'inches' ? 'Inches' : 'Millimeters'}
+              </button>
+            ))}
+          </div>
         </div>
+
+        {/* Price per sheet */}
+        <div>
+          <label className="block text-[13px] font-medium text-text-secondary mb-2">Price per sheet</label>
+          <div className="flex items-center gap-1">
+            <span className="text-text-secondary text-[15px]">$</span>
+            <input
+              type="number"
+              min={0}
+              value={sheetPrice}
+              onChange={(e) => setSheetPrice(Math.max(0, parseFloat(e.target.value) || 0))}
+              className="w-20 border border-border rounded-[var(--radius-input)] px-3 py-2.5 text-center text-text bg-surface-raised text-[15px] outline-none focus:ring-1 focus:ring-primary/30"
+            />
+          </div>
+        </div>
+
+        {/* Gemini API Key */}
+        <details className="group">
+          <summary className="flex items-center gap-1 text-[13px] font-medium text-text-secondary cursor-pointer list-none">
+            <ChevronDown size={14} className="transition-transform group-open:rotate-180" />
+            Gemini API Key
+            <span className="text-text-muted font-normal ml-1">(for photo extraction)</span>
+          </summary>
+          <div className="mt-2 space-y-2">
+            <p className="text-[11px] text-text-muted">
+              Free at{' '}
+              <a
+                href="https://aistudio.google.com/apikey"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-primary hover:underline"
+              >
+                aistudio.google.com
+              </a>
+              {' '}— no credit card required.
+            </p>
+            <div className="flex gap-2">
+              <input
+                type={showApiKey ? 'text' : 'password'}
+                value={geminiApiKey}
+                onChange={(e) => setGeminiApiKey(e.target.value)}
+                placeholder="AIza..."
+                className="flex-1 border border-border rounded-[var(--radius-input)] px-3 py-2.5 text-[15px] text-text bg-surface-raised outline-none focus:ring-1 focus:ring-primary/30"
+              />
+              <button
+                onClick={() => setShowApiKey(!showApiKey)}
+                className={chipClass(false)}
+              >
+                {showApiKey ? 'Hide' : 'Show'}
+              </button>
+            </div>
+          </div>
+        </details>
       </div>
     </div>
   )
